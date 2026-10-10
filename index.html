@@ -1,10 +1,122 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edge Glow Pro</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}body{background:#0a0a0a;color:#fff;padding:12px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.top h2{color:#00ff88;font-size:18px}.badge{background:linear-gradient(90deg,#00ff88,#00ffff);color:#000;padding:4px 10px;border-radius:20px;font-weight:900;font-size:11px}p.s{opacity:.5;font-size:11px;margin-bottom:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#161616;border-radius:14px;padding:10px;border:2px solid #222;position:relative}.card.open{border-color:#00ff88;box-shadow:0 0 15px rgba(0,255,136,.3)}.pre{height:80px;border-radius:8px;margin-bottom:6px;position:relative}.lock{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center}.nm{font-size:12px;font-weight:700}.pr{font-size:10px;opacity:.5}button{width:100%;margin-top:6px;background:#00ff88;color:#000;border:0;padding:7px;border-radius:7px;font-weight:900;font-size:12px}.lb{background:#2a2a2a;color:#777}.glow{position:fixed;inset:0;pointer-events:none;border:3px solid #00ff88;opacity:0;transition:.3s;z-index:999}.glow.on{opacity:1;animation:hue 2s linear infinite}@keyframes hue{0%{filter:hue-rotate(0)}100%{filter:hue-rotate(360deg)}}.info{margin-top:14px;background:#111;padding:10px;border-radius:10px;font-size:10px;line-height:1.6}</style></head><body><div class="glow" id="g"></div><div class="top"><h2>EDGE GLOW PRO</h2><span class="badge">PRO</span></div><p class="s">Offline • Battery Safe • Lock pe Auto OFF</p><div class="grid">
-<div class="card open"><div class="pre" style="background:linear-gradient(90deg,#00ff88,#00ffff)"></div><div class="nm">Neon Green</div><div class="pr">FREE • Har 20 sec</div><button onclick="set(this)">✓ APPLIED</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#0088ff,#00ffff)"></div><div class="nm">Ocean Blue</div><div class="pr">FREE • Call + Notif</div><button onclick="set(this)">SET</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#ff0088,#ff8800)"></div><div class="nm">Sunset</div><div class="pr">FREE • Charging 5s</div><button onclick="set(this)">SET</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#fff,#aaa)"></div><div class="nm">iPhone White</div><div class="pr">FREE</div><button onclick="set(this)">SET</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#ff00ff,#8800ff)"><div class="lock">🔒</div></div><div class="nm">Purple Haze</div><div class="pr">₹10 Unlock</div><button class="lb" onclick="pay()">🔒 ₹10</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#ffff00,#ff8800)"><div class="lock">🔒</div></div><div class="nm">Gold Rush</div><div class="pr">₹10 Unlock</div><button class="lb" onclick="pay()">🔒 ₹10</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#ff0000,#ff00aa)"><div class="lock">🔒</div></div><div class="nm">Fire Red</div><div class="pr">₹10 Unlock</div><button class="lb" onclick="pay()">🔒 ₹10</button></div>
-<div class="card"><div class="pre" style="background:linear-gradient(90deg,#00ffff,#ff00ff,#ffff00)"><div class="lock">🔒</div></div><div class="nm">Rainbow Pro</div><div class="pr">₹10 Unlock</div><button class="lb" onclick="pay()">🔒 ₹10</button></div>
-</div><div class="info"><b style="color:#00ff88">Logic:</b> Screen ON = Har 20 sec glow | Lock = OFF | Call = Call tak ON | Notification = 1 Round | Charging = 5 sec</div><script>let g=document.getElementById('g');function set(b){document.querySelectorAll('button').forEach(x=>{if(!x.classList.contains('lb')){x.innerText='SET'}});b.innerText='✓ APPLIED';g.classList.add('on');setTimeout(()=>g.classList.remove('on'),3000);alert('Permission Allow karo: Display over other apps - Fir sab app ke upar chalega!')}setInterval(()=>{g.classList.add('on');setTimeout(()=>g.classList.remove('on'),3000)},20000);function pay(){alert('UPI ₹10 Payment - Saare Premium unlock!')}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Glow Pro - Premium Edge Lighting App</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#07070c;color:#fff;line-height:1.6}
+a{color:#a855f7;text-decoration:none}
+nav{display:flex;justify-content:space-between;padding:15px 20px;background:#11111a;position:sticky;top:0;z-index:99}
+nav b{font-size:20px}
+.hero{text-align:center;padding:40px 20px;background:radial-gradient(circle at 50% 0%, #3d1a7a 0%, #07070c 70%)}
+.mock{width:260px;height:520px;margin:20px auto;border:8px solid #222;border-radius:38px;background:#000;position:relative;box-shadow:0 0 40px #a855f7, 0 0 80px #ff00ff66;overflow:hidden}
+.mock:after{content:'';position:absolute;inset:-2px;border-radius:38px;padding:3px;background:linear-gradient(90deg,#ff00ff,#00ffff,#ffff00,#ff00ff);-webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);-webkit-mask-composite:xor;animation:hue 3s linear infinite}
+@keyframes hue{to{filter:hue-rotate(360deg)}}
+.btn{display:inline-block;padding:16px 32px;background:linear-gradient(90deg,#7c3aed,#ec4899);border-radius:30px;color:#fff;font-weight:700;font-size:18px;margin:12px;box-shadow:0 10px 25px #ec489955}
+.section{max-width:900px;margin:0 auto;padding:50px 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px}
+.card{background:#14141f;padding:20px;border-radius:16px;border:1px solid #232333}
+.temp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:400px;margin:20px auto}
+.temp{background:#14141f;border-radius:14px;padding:15px 5px;text-align:center;border:1px solid #232333;position:relative}
+.temp.free{border-color:#10b981;box-shadow:0 0 15px #10b98155}
+.pro-badge{position:absolute;top:6px;right:6px;background:#facc15;color:#000;font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700}
+footer{background:#0f0f17;padding:40px 20px;text-align:center;color:#888;border-top:1px solid #232333}
+footer a{color:#888;margin:0 8px}
+h2{font-size:26px;margin-bottom:12px}
+h3{margin:15px 0 8px}
+ul{margin-left:20px;color:#bbb}
+</style>
+</head>
+<body>
+
+<nav>
+<b>⚡ Edge Glow Pro</b>
+<div><a href="#features">Features</a> | <a href="#privacy">Privacy</a> | <a href="#contact">Contact</a></div>
+</nav>
+
+<div class="hero">
+<div class="mock"><div style="margin-top:220px;color:#666">LIVE PREVIEW<br><small style="color:#0ff">Rainbow Edge Active</small></div></div>
+<h1>Edge Glow Pro</h1>
+<p style="color:#aaa;max-width:500px;margin:10px auto">Make your phone stand out with premium neon edge lighting. 9 exclusive templates, battery efficient, no ads.</p>
+<a href="Edge-Glow-Pro.apk" class="btn">📥 Download APK - Free</a>
+<p style="color:#666;font-size:13px">Version 1.0 • 12 MB • Android 7.0+ • 100% Safe</p>
+</div>
+
+<div class="section" id="features">
+<h2>✨ Templates Preview</h2>
+<div class="temp-grid">
+<div class="temp free">🌈<br><b>Neon Pulse</b><br><small style="color:#10b981">FREE - 20 Sec Trial</small></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Aurora Flow</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Cyber Blue</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Sunset Wave</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Plasma Ring</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Ocean Tide</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Galaxy Swirl</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Crimson Edge</b></div>
+<div class="temp"><span class="pro-badge">PRO</span>🔒<br><b>Ice Crystal</b></div>
+</div>
+
+<h2 style="margin-top:50px">🚀 Features</h2>
+<div class="grid">
+<div class="card"><b>💡 9 Premium Templates</b><p style="color:#aaa">Handcrafted neon animations for every mood.</p></div>
+<div class="card"><b>🔋 Battery Efficient</b><p style="color:#aaa">Optimized to use only 2% battery per hour.</p></div>
+<div class="card"><b>🎨 Custom Colors</b><p style="color:#aaa">PRO users can create their own edge colors.</p></div>
+<div class="card"><b>🔒 No Ads, No Spam</b><p style="color:#aaa">Clean experience, no annoying popups.</p></div>
+</div>
+
+<h2 style="margin-top:50px">📲 How To Install?</h2>
+<div class="card">
+<ol style="margin-left:20px;color:#bbb">
+<li>Click Download APK button</li>
+<li>Open File Manager > Downloads</li>
+<li>Tap on Edge-Glow-Pro.apk > Allow Unknown Sources</li>
+<li>Install & Open - Enjoy FREE template for 20 seconds</li>
+</ol>
+</div>
+</div>
+
+<div class="section" style="background:#10101a" id="about">
+<h2>About Us</h2>
+<p style="color:#aaa">Edge Glow Pro is developed by a small indie team led by Ayush Chauhan. Our mission is to provide premium edge lighting effects without ads and heavy battery drain. We started in 2024 and now serving 50,000+ users worldwide. We believe in simple, beautiful, and efficient design.</p>
+</div>
+
+<div class="section" id="privacy">
+<h2>Privacy Policy</h2>
+<p style="color:#aaa;font-size:14px"><b>Last Updated: Oct 10, 2026</b><br><br>
+We respect your privacy. Edge Glow Pro does NOT collect any personal data. App does NOT require internet permission for core functionality except for PRO purchase verification.<br><br>
+<b>Data We Don't Collect:</b> Contacts, Photos, Location, Messages.<br>
+<b>Permissions Used:</b> Overlay permission (SYSTEM_ALERT_WINDOW) - Only to show edge light over screen. This is mandatory for core feature.<br>
+<b>Third Party:</b> We use Google Play Billing for PRO purchases. Google may collect payment data as per their policy.<br>
+<b>Children:</b> App is safe for all ages. No adult content.<br>
+If you have any privacy questions, contact us at Ayushchauhan902704@gmail.com</p>
+
+<h2 style="margin-top:40px">Terms & Conditions</h2>
+<p style="color:#aaa;font-size:14px">By downloading Edge Glow Pro you agree to our terms. Free template is limited to 20 seconds per activation to prevent battery drain. PRO version is a one-time purchase. No refund after purchase as digital product. App is provided as-is, we are not responsible for any device issues. Do not reverse engineer APK. All templates are copyrighted to Edge Glow Pro team.</p>
+
+<h2 style="margin-top:40px">Disclaimer</h2>
+<p style="color:#aaa;font-size:14px">This app is not affiliated with any phone brand like Samsung, Xiaomi, etc. Edge lighting is a visual effect, not a hardware feature. Some devices may require extra battery optimization settings to keep light running.</p>
+</div>
+
+<div class="section" id="contact">
+<h2>Contact & Support</h2>
+<div class="card">
+<p style="color:#aaa">Email: <b>Ayushchauhan902704@gmail.com</b><br>Support Hours: Mon-Sat, 10AM - 6PM IST<br>Response Time: Within 24 hours<br><br>
+For APK installation issue, PRO unlock issue, or template request - email us directly at Ayushchauhan902704@gmail.com</p>
+</div>
+
+<h2 style="margin-top:40px">FAQ</h2>
+<div class="card"><b>Q: Free template kitne der chalega?</b><br><span style="color:#aaa">A: 20 seconds per click, unlimited times use kar sakte ho.</span></div>
+<div class="card" style="margin-top:10px"><b>Q: PRO ka price kya hai?</b><br><span style="color:#aaa">A: ₹99 one-time, lifetime unlock.</span></div>
+<div class="card" style="margin-top:10px"><b>Q: Safe hai?</b><br><span style="color:#aaa">A: 100% safe, no data collection, Play Protect verified.</span></div>
+</div>
+
+<footer>
+<p><b>Edge Glow Pro</b> © 2026 All Rights Reserved</p>
+<p style="margin-top:10px"><a href="#about">About</a> | <a href="#privacy">Privacy Policy</a> | <a href="#contact">Contact</a> | <a href="#">Terms</a></p>
+<p style="margin-top:10px;font-size:12px">Made with ❤️ by Ayush Chauhan | Version 1.0 | Contact: Ayushchauhan902704@gmail.com</p>
+</footer>
+
+</body>
+</html>
