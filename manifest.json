@@ -1,14 +1,19 @@
 {
   "name": "Edge Glow Pro",
   "short_name": "Edge Glow",
-  "description": "Edge Glow Pro - Border Light Live Wallpaper",
+  "description": "Border Light Live Wallpaper and Edge Lighting App",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#7c3aed",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2698/2698011.png",
+      "src": "https://edge-glow-pro.vercel.app/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://edge-glow-pro.vercel.app/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
