@@ -8,14 +8,10 @@
   "theme_color": "#7c3aed",
   "icons": [
     {
-      "src": "https://edge-glow-pro.vercel.app/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://edge-glow-pro.vercel.app/icon-512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2698/2698011.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
