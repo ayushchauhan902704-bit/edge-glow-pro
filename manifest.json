@@ -1,0 +1,16 @@
+{
+  "name": "Edge Glow Pro",
+  "short_name": "Edge Glow",
+  "description": "Edge Glow Pro - Border Light Live Wallpaper",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2698/2698011.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
