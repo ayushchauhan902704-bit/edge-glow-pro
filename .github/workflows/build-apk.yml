@@ -8,13 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node 18
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install NPM packages
+        run: npm install --legacy-peer-deps
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
