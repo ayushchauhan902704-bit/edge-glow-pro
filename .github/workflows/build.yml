@@ -10,10 +10,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Accept All Licenses
+      - name: Fix Licenses
         run: |
-          yes | sdkmanager --licenses
-          yes | sdkmanager --sdk_root=$ANDROID_HOME "build-tools;33.0.1" "platforms;android-34"
+          echo "$ANDROID_HOME"
+          ls $ANDROID_HOME/cmdline-tools/
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;33.0.1" "platforms;android-34" || true
 
       - uses: gradle/gradle-build-action@v3
         with:
@@ -24,8 +26,7 @@ jobs:
 
       - name: Build Signed APK
         working-directory: ./android
-        run: |
-          gradle assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=123456 -Pandroid.injected.signing.key.alias=mykey -Pandroid.injected.signing.key.password=123456
+        run: gradle assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=123456 -Pandroid.injected.signing.key.alias=mykey -Pandroid.injected.signing.key.password=123456
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
