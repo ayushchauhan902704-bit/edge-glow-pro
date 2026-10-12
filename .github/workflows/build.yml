@@ -1,5 +1,5 @@
 name: Build APK
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,15 +9,19 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: 8.5
-      - name: Build APK
+      - uses: android-actions/setup-android@v3
+      
+      - name: Create Keystore
+        run: keytool -genkey -v -keystore android/app/mykey.jks -storepass 123456 -alias mykey -keypass 123456 -keyalg RSA -validity 10000 -dname "CN=EdgeGlow"
+
+      - name: Build Release APK
+        working-directory: ./android
         run: |
-          cd android
-          gradle assembleDebug
+          chmod +x gradlew
+          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=123456 -Pandroid.injected.signing.key.alias=mykey -Pandroid.injected.signing.key.password=123456
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Edge-Glow-Pro-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: Edge-Glow-Download
+          path: android/app/build/outputs/apk/release/*.apk
