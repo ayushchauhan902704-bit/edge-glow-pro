@@ -16,16 +16,18 @@ jobs:
           echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
           echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> $ANDROID_HOME/licenses/android-sdk-license
           echo "24333f8a63b6825ea9c5514f83c1059b8ea4b074" >> $ANDROID_HOME/licenses/android-sdk-license
-          echo "y" | sdkmanager --licenses || true
+
+      - uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 8.5
 
       - name: Create Keystore
         run: keytool -genkey -v -keystore android/app/mykey.jks -storepass 123456 -alias mykey -keypass 123456 -keyalg RSA -validity 10000 -dname "CN=EdgeGlow"
 
-      - name: Build Signed APK
+      - name: Build Signed Release APK
         working-directory: ./android
         run: |
-          chmod +x gradlew
-          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=123456 -Pandroid.injected.signing.key.alias=mykey -Pandroid.injected.signing.key.password=123456
+          gradle assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=123456 -Pandroid.injected.signing.key.alias=mykey -Pandroid.injected.signing.key.password=123456
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
