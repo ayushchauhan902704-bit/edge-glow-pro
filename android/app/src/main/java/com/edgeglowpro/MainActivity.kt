@@ -1,76 +1,90 @@
 package com.edgeglowpro
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Intent
-import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.widget.Button
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var prefs: SharedPreferences
-    private val CHANNEL_ID = "perm_channel"
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        prefs = getSharedPreferences("edge_prefs", MODE_PRIVATE)
-        createChannel()
+        setContent {
+            var selectedTemplate by remember { mutableStateOf(0) }
 
-        // Template SET button
-        try {
-            findViewById<Button>(R.id.btnSet1).setOnClickListener {
-                prefs.edit().putInt("selected_template", 1).apply()
-                Toast.makeText(this, "Rainbow Glow SET!", Toast.LENGTH_SHORT).show()
-                testLight(20000L)
+            val templates = listOf(
+                "Rainbow" to listOf(Color.Magenta, Color.Yellow, Color.Cyan),
+                "Neon Blue" to listOf(Color.Blue, Color.Cyan),
+                "Fire" to listOf(Color.Red, Color.Yellow),
+                "Ocean" to listOf(Color.Blue, Color.Green),
+                "Sunset" to listOf(Color(0xFFFF6B6B), Color(0xFFFFE66D)),
+                "Galaxy" to listOf(Color(0xFF9D4EDD), Color(0xFF00F5D4)),
+                "Lava" to listOf(Color.Red, Color(0xFFFF8500)),
+                "Ice" to listOf(Color.White, Color.Cyan),
+                "Forest" to listOf(Color.Green, Color(0xFF90BE6D)),
+                "Candy" to listOf(Color.Magenta, Color(0xFFF72585)),
+                "Gold" to listOf(Color(0xFFFFD700), Color(0xFFFFA500)),
+                "Purple Haze" to listOf(Color(0xFF7B2CBF), Color.Magenta),
+                "Aqua" to listOf(Color.Cyan, Color.Blue),
+                "Rose" to listOf(Color.Red, Color.Magenta),
+                "Lime" to listOf(Color.Green, Color.Yellow),
+                "Storm" to listOf(Color.Gray, Color.Blue)
+            )
+
+            Column(modifier = Modifier.fillMaxSize().background(Color(0xFF0F0F1A)).padding(16.dp)) {
+                Text("Edge Glow Pro", color = Color.White, fontSize = 24.sp, modifier = Modifier.padding(bottom = 16.dp))
+
+                LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    items(templates.size) { index ->
+                        val isUnlocked = index == 0 // Sirf pehla wala unlocked
+                        Box(modifier = Modifier.height(90.dp).background(
+                            brush = Brush.linearGradient(templates[index].second),
+                            shape = RoundedCornerShape(12.dp)
+                        ).clickable {
+                            if(isUnlocked) selectedTemplate = index
+                            else { /* Pro dialog dikhao */ }
+                        }, contentAlignment = Alignment.Center) {
+                            if(!isUnlocked) {
+                                Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha=0.6f), RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
+                                    Text("🔒 LOCKED", color = Color.White)
+                                }
+                            } else {
+                                if(selectedTemplate == index) Text("✓", color=Color.White, fontSize=20.sp)
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Neeche SET ka button
+                Button(
+                    onClick = {
+                        // Light on karo
+                        val intent = Intent(this@MainActivity, EdgeLightingService::class.java)
+                        intent.putExtra("template", selectedTemplate)
+                        startForegroundService(intent)
+                    },
+                    modifier = Modifier.fillMaxWidth().height(55.dp),
+                    shape = RoundedCornerShape(30.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9D4EDD))
+                ) {
+                    Text("SET EDGE LIGHT", color = Color.White, fontSize = 16.sp)
+                }
             }
-        } catch(e: Exception) {}
-
-        // Permission & Test button
-        findViewById<Button>(R.id.btnEnable).setOnClickListener {
-            checkAndNotify()
         }
-
-        checkAndNotify()
-    }
-
-    private fun createChannel() {
-        val channel = NotificationChannel(CHANNEL_ID, "Permission Alert", NotificationManager.IMPORTANCE_HIGH)
-        val nm = getSystemService(NotificationManager::class.java)
-        nm.createNotificationChannel(channel)
-    }
-
-    private fun checkAndNotify() {
-        if (!Settings.canDrawOverlays(this)) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-            val pending = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
-                .setContentTitle("Edge Glow Pro - Permission Do")
-                .setContentText("Display over other apps ON karo, tabhi har app pe light jalegi")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setContentIntent(pending)
-                .build()
-            val nm = getSystemService(NotificationManager::class.java)
-            nm.notify(101, notification)
-            Toast.makeText(this, "Notification pe click karke permission ON karo", Toast.LENGTH_LONG).show()
-            startActivity(intent)
-        } else {
-            Toast.makeText(this, "Permission ON! Ab har app pe chalegi", Toast.LENGTH_SHORT).show()
-            testLight(20000L)
-        }
-    }
-
-    private fun testLight(duration: Long) {
-        val i = Intent(this, EdgeLightingService::class.java)
-        i.putExtra("DURATION", duration)
-        startService(i)
     }
 }
