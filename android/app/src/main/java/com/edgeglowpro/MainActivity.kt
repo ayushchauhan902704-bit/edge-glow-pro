@@ -7,7 +7,6 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -24,11 +23,8 @@ import androidx.compose.ui.unit.sp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Permission - App khulte hi mangega
         if (!Settings.canDrawOverlays(this)) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-            startActivity(intent)
+            startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
         }
 
         setContent {
@@ -59,52 +55,57 @@ class MainActivity : ComponentActivity() {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(templates.size) { index ->
-                        val isUnlocked = index < 8
-                        Box(
-                            modifier = Modifier
-                               .height(110.dp)
-                               .background(
-                                    brush = Brush.linearGradient(templates[index].second),
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                               .clickable {
-                                    if (isUnlocked) selectedTemplate = index
+                        // FIX 1: Sirf 1 hi unlock - pehla wala
+                        val isUnlocked = index == 0
+
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(
+                                modifier = Modifier
+                                   .height(110.dp).fillMaxWidth()
+                                   .background(
+                                        brush = Brush.linearGradient(templates[index].second),
+                                        shape = RoundedCornerShape(16.dp)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (!isUnlocked) {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize()
+                                           .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(16.dp)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text("🔒 LOCKED", color = Color.White, fontSize = 12.sp)
+                                    }
+                                } else if (selectedTemplate == index) {
+                                    Text("✓ SELECTED", color = Color.White, fontSize = 12.sp,
+                                        modifier = Modifier.background(Color.Black.copy(alpha=0.6f), RoundedCornerShape(6.dp)).padding(6.dp))
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(6.dp))
+                            // FIX 2: Har template ke niche SET ka option
+                            Button(
+                                onClick = {
+                                    if(isUnlocked){
+                                        selectedTemplate = index
+                                        val intent = Intent(this@MainActivity, EdgeLightingService::class.java)
+                                        intent.putExtra("template", index)
+                                        startForegroundService(intent)
+                                    }
                                 },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (!isUnlocked) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(12.dp)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text("🔒 LOCKED", color = Color.White, fontSize = 12.sp)
-                                }
-                            } else {
-                                if (selectedTemplate == index) {
-                                    Text("✓ SELECTED", color = Color.White, fontSize = 14.sp, modifier = Modifier.background(Color.Black.copy(alpha=0.5f), RoundedCornerShape(6.dp)).padding(6.dp))
-                                }
+                                modifier = Modifier.fillMaxWidth().height(32.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if(isUnlocked) Color(0xFF9D4EDD) else Color.Gray
+                                )
+                            ) {
+                                Text(if(isUnlocked) "SET" else "LOCKED", fontSize = 11.sp, color = Color.White)
                             }
                         }
                     }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = {
-                        val intent = Intent(this@MainActivity, EdgeLightingService::class.java)
-                        intent.putExtra("template", selectedTemplate)
-                        startForegroundService(intent)
-                    },
-                    modifier = Modifier.fillMaxWidth().height(55.dp),
-                    shape = RoundedCornerShape(30.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9D4EDD))
-                ) {
-                    Text("SET EDGE LIGHT", color = Color.White, fontSize = 16.sp)
                 }
             }
         }
