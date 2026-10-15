@@ -23,12 +23,13 @@ jobs:
 
       - name: Create Private Keystore - SAFE like WhatsApp
         run: |
+          rm -f android/app/mykey.jks
           mkdir -p android/app
-          keytool -genkey -v -keystore android/app/mykey.jks -storepass ${{ secrets.KEYSTORE_PASSWORD }} -alias ${{ secrets.KEY_ALIAS }} -keypass ${{ secrets.KEY_PASSWORD }} -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=EdgeGlow, OU=Pro, O=EdgeGlowPro, L=Manglaur, S=Uttarakhand, C=IN"
+          keytool -genkey -v -keystore android/app/mykey.jks -storepass ${{ secrets.KEYSTORE_PASSWORD }} -alias ${{ secrets.KEY_ALIAS }} -keypass ${{ secrets.KEYSTORE_PASSWORD }} -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=EdgeGlow, OU=Pro, O=EdgeGlowPro, L=Manglaur, S=Uttarakhand, C=IN"
 
       - name: Build Signed APK
         working-directory: ./android
-        run: gradle assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+        run: gradle assembleRelease -Pandroid.injected.signing.store.file=$PWD/app/mykey.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
